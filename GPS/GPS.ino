@@ -1,43 +1,53 @@
 #include <TinyGPS++.h>
-#include <HardwareSerial.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
-// Membuat instance untuk GPS dan serial port
 TinyGPSPlus gps;
 
-HardwareSerial GPS_Serial(1);  // Menggunakan UART1
-
+HardwareSerial GPS_Serial(2);  
 
 void setup() {
-  // Inisialisasi serial monitor untuk debugging
   Serial.begin(115200);
   
-  // Inisialisasi serial GPS
-  GPS_Serial.begin(9600, SERIAL_8N1, 18, 17);  // RX ke Pin 18, TX ke Pin 17
+  GPS_Serial.begin(9600, SERIAL_8N1, 18, 17);  
 
   Serial.println("Menginisialisasi GPS...");
+
+    xTaskCreate(
+    rsLoop,
+    "RS485 Loop",
+    1000,
+    NULL,
+    1,
+    NULL  
+    );
 }
 
 void loop() {
-  while (GPS_Serial.available() > 0) {
-    char c = GPS_Serial.read();
-    gps.encode(c); 
-    if (gps.location.isValid()) {
-      Serial.print("Latitude: ");
-      Serial.println(gps.location.lat(), 6);
-      Serial.print("Longitude: ");
+    if (gps.location.isUpdated()) {
+      Serial.print("Latitude= "); 
+      Serial.print(gps.location.lat(), 6);
+      Serial.print(" Longitude= ");
       Serial.println(gps.location.lng(), 6);
-    } else {
-      Serial.println("Mencari sinyal GPS...");
+      delay(1000);
+      if (gps.time.isValid()) {
+        Serial.print("Waktu (UTC): ");
+        Serial.print(gps.time.hour());
+        Serial.print(":");
+        Serial.print(gps.time.minute());
+        Serial.print(":");
+        Serial.println(gps.time.second());
+        delay(1000);
+      }
+        Serial.println("---------------");
     }
-    if (gps.time.isValid()) {
-      Serial.print("Waktu (UTC): ");
-      Serial.print(gps.time.hour());
-      Serial.print(":");
-      Serial.print(gps.time.minute());
-      Serial.print(":");
-      Serial.println(gps.time.second());
-    }
+}
 
-    delay(1000);
+void rsLoop (void * parameter) {
+  while(true){
+    while (GPS_Serial.available() > 0) {
+    gps.encode(GPS_Serial.read()); 
+    }
+  vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
