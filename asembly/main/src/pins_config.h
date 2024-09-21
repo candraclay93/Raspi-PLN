@@ -13,6 +13,15 @@
 #define RS485_TX 15
 #define GPS_RX 18
 #define GPS_TX 17
+#define SCK     12
+#define MISO    13
+#define MOSI    11
+#define CS      10
+#define RESET   0
+#define DIO0    1
+#define DIO1    2
+#define DIO2    3
+#define DIO3    4
 
 
 #endif //PINS_CONFIG_H

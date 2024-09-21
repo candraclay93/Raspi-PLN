@@ -9,12 +9,12 @@
 extern PZEM004Tv30 pzem;
 
 void pzemSetup();
-void getVoltage();
-void getCurrent();
-void getPower();
-void getEnergy();
-void getFrequency();
-void getPf();
+float getVoltage();
+float getCurrent();
+float getPower();
+float getEnergy();
+float getFrequency();
+float getPf();
 void getAllPzem();
 
 #endif //PZEM_CONFIG_H

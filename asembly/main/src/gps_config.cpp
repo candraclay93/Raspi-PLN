@@ -1,7 +1,6 @@
 #include "gps_config.h"
 
 
-
 TinyGPSPlus gps;
 EspSoftwareSerial::UART GPS_Serial;
 

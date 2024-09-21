@@ -1,12 +1,9 @@
 #include "src/main.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-// #include <TinyGPS++.h>
 
 
 
-// TinyGPSPlus gps;
-// EspSoftwareSerial::UART GPS_Serial;
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -39,11 +36,15 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(getDateTimeString());
-  getAllPzem();
-  getLocation();
-  
-  Serial.println("-------------------");
+  // Serial.println(getDateTimeString());
+  // getAllPzem();
+  // getLocation();
+
+  // Serial.println("-------------------");
+  int packetSize = LoRa.parsePacket();
+  if(packetSize) {
+    Serial.print("hello lora");
+  }
   delay(1000);
 }
 
