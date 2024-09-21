@@ -2,6 +2,9 @@ import time
 from LoRaRF import SX127x, LoRaSpi, LoRaGpio
 import os
 import sys
+import json
+import re
+import signal
 from RPi import GPIO
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -49,10 +52,32 @@ LoRa.setSyncWord(0x34)
 
 print("\n-- LoRa Receiver --\n")
 
+def signal_handler(sig, frame):
+    print("Stopping service...")
+    GPIO.output(LED_RUNNING_PIN, GPIO.LOW)
+    GPIO.cleanup()
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGINT, signal_handler)
+
 def receive_callback():
     # print("Receive")
     GPIO.output(LED_RECEIVE_PIN, GPIO.HIGH)
     time.sleep(.3)
+    
+def extract_json_string(input_string):
+    # Mencari isi dalam kurung kurawal
+    match = re.search(r'\{.*\}', input_string)
+    if match:
+        json_str = match.group(0)
+        try:
+            # Mengonversi string JSON menjadi dictionary
+            data = json.loads(json_str)
+            return data
+        except json.JSONDecodeError:
+            return "Invalid JSON"
+    return "No JSON found"
 
 try:
     while True:
@@ -63,11 +88,15 @@ try:
         message = ""
         while LoRa.available() > 1:
             message += chr(LoRa.read())
+            # print(f"{chr(LoRa.read())}")
         counter = LoRa.read()
 
         # print(LoRa.get())
         LoRa.onReceive(receive_callback())
         
+        message = extract_json_string(message)
+        
+        # print(f"{message}")
         print(f"{message}  {counter}")
         print("Packet status: RSSI = {0:0.2f} dBm | SNR = {1:0.2f} dB".format(
             LoRa.packetRssi(), LoRa.snr()))
@@ -81,7 +110,9 @@ try:
         print(f"---" * 30)
         
         
-except KeyboardInterrupt:
-    print("exit code")
+except Exception as e:
+    print(f"An error occurred: {e}")
+    
 finally :
     GPIO.cleanup()
+    
