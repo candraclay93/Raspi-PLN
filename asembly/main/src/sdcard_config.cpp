@@ -9,7 +9,7 @@ void sdCardSetup() {
     Serial.println("Gagal menginisialisasi SD card!");
     return;
   }
-  Serial.println("SD card berhasil diinisialisasi.");
+  // Serial.println("SD card berhasil diinisialisasi.");
 }
 
 void writeFile(const char *path, const char *message) {

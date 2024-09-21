@@ -36,15 +36,25 @@ void setup() {
 }
 
 void loop() {
-  // Serial.println(getDateTimeString());
+  Serial.println(getDateString());
+  Serial.println(getTimeString());
+  // Serial.println(getVoltage());
+  // Serial.println(getCurrent());
+  // Serial.println(getPower());
+  // Serial.println(getEnergy());
+  // Serial.println(getFrequency());
+  // Serial.println(getPf());
+
+
+
   // getAllPzem();
   // getLocation();
 
   // Serial.println("-------------------");
-  int packetSize = LoRa.parsePacket();
-  if(packetSize) {
-    Serial.print("hello lora");
-  }
+  // int packetSize = LoRa.parsePacket();
+  // if(packetSize) {
+  //   Serial.print("hello lora");
+  // }
   delay(1000);
 }
 

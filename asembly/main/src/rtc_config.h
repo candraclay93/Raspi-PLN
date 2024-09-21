@@ -9,7 +9,9 @@
 extern RTC_DS3231 rtc;
 
 void rtcSetup();
-String getDateTimeString();
+String getDateString();
+
+String getTimeString();
 void setDateTime(int year, int month, int day, int hour, int minute, int second);
 
 #endif //RTC_CONFIG_H
