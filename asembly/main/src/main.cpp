@@ -1,31 +1,26 @@
-// #include "main.h"
+#include "main.h"
 
 // HardwareSerial PzemSerial(1);
 
-// void mySetup(const int serialBaudrate, bool serialEnable) {
-//   if (serialEnable) {
-//     Serial.begin(serialBaudrate);
-//   }
+Main::Main(long baudRate) : _baudRate(baudRate){}
 
-//   rtcSetup();
-//   pzemSetup();
-//   sdCardSetup();
-//   gpsSetup();
-// }
+void Main::setup() {
+    Serial.begin(_baudRate);
+    this->rtcSetup();
+    this->pzemSetup();
+    this->sdCardSetup();
+    this->gpsSetup();
+}
 
-// void rsLoop (void * parameter) {
-//   while(true){
-//   node.task();
-//   vTaskDelay(10 / portTICK_PERIOD_MS);
-//   }
-// }
+void Main::sendMessage(const String& message) {
+    Serial.println(message);
+}
 
-// void readGps(void * parameter){
-//   while(true){
-//     while (GPS_Serial.available() > 0) {
-//     gps.encode(GPS_Serial.read()); 
-//     }
-//   vTaskDelay(10 / portTICK_PERIOD_MS);
-//   }
-// }
-
+String Main::readMessage() {
+    String message = "";
+    while (Serial.available() > 0) {
+        char c = Serial.read();
+        message += c;
+    }
+    return message;
+}

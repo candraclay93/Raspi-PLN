@@ -1,25 +1,32 @@
-#ifndef PINS_CONFIG_H
-#define PINS_CONFIG_H
+#ifndef PINSCONFIG_H
+#define PINSCONFIG_H
 
-#define RTC_SDA_PIN 8
-#define RTC_SCL_PIN 9
-#define PZEM_RX 47 
-#define PZEM_TX 48 
-#define SPI_MOSI 11
-#define SPI_SCK  12
-#define SPI_MISO 13
-#define SD_CS 5  
-#define RS485_RX 16
-#define RS485_TX 15
-#define GPS_RX 18
-#define GPS_TX 17
+class PinsConfig {
+  public:
+    static const int RTC_SDA_PIN = 8;
+    static const int RTC_SCL_PIN = 9;
+    
+    static const int PZEM_RX = 47;
+    static const int PZEM_TX = 48;
+    
+    static const int SPI_MOSI = 11;
+    static const int SPI_SCK  = 12;
+    static const int SPI_MISO = 13;
+    
+    static const int SD_CS    = 5;
 
-#define CS_LORA      10
-#define RESET   0
-#define DIO0    1
-#define DIO1    2
-#define DIO2    3
-#define DIO3    4
+    static const int RS485_RX = 16;
+    static const int RS485_TX = 15;
 
+    static const int GPS_RX = 18;
+    static const int GPS_TX = 17;
 
-#endif //PINS_CONFIG_H
+    static const int LORA_CS = 10;
+    static const int LORA_RST   = 0;
+    static const int DIO0    = 1;
+    static const int DIO1    = 2;
+    static const int DIO2    = 3;
+    static const int DIO3    = 4;
+};
+
+#endif

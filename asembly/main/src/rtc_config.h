@@ -2,16 +2,21 @@
 #define RTC_CONFIG_H
 
 #include "pins_config.h"
-// #include "libs.h"
 #include <Wire.h>
 #include <RTClib.h>
 
-extern RTC_DS3231 rtc;
+using PINS = PinsConfig;
 
-void rtcSetup();
-String getDateString();
-
-String getTimeString();
-void setDateTime(int year, int month, int day, int hour, int minute, int second);
+class RTC : public RTC_DS3231 {
+  public:
+    // RTC();
+    void rtcSetup();
+    String getDateString();
+    String getTimeString();
+    void setDateTime(int year, int month, int day, int hour, int minute, int second);
+  private:
+    const int _RTC_SDA_PIN = PINS::RTC_SDA_PIN;
+    const int _RTC_SCL_PIN = PINS::RTC_SCL_PIN;
+};
 
 #endif //RTC_CONFIG_H

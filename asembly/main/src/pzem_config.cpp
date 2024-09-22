@@ -1,40 +1,50 @@
 #include "pzem_config.h"
-// #include <PZEM004Tv30.h>
-
 
 HardwareSerial PzemSerial(1);
-PZEM004Tv30 pzem(PzemSerial, PZEM_RX, PZEM_TX);
 
-void pzemSetup() {
-  PzemSerial.begin(9600, SERIAL_8N1, PZEM_RX, PZEM_TX);
+Pzem::Pzem() : PZEM004Tv30(PzemSerial, _PZEM_RX, _PZEM_TX) {}
+
+void Pzem::pzemSetup() {
+  PzemSerial.begin(9600, SERIAL_8N1, _PZEM_RX, _PZEM_TX);
+
+  if (!PzemSerial) {
+    Serial.println("Pzem Serial initialization failed");
+    while (1);
+  }
 }
 
-float getVoltage() {
-  float voltage = pzem.voltage();
+
+float Pzem::getVoltage() {
+  float voltage = this->voltage();
   return isnan(voltage) || voltage == 0 ? 0 : voltage;
 }
 
-float getCurrent() {
-  float current = pzem.current();
+
+float Pzem::getCurrent() {
+  float current = this->current();
   return isnan(current) || current == 0 ? 0 : current;
 }
 
-float getPower() {
-  float power = pzem.power();
+
+float Pzem::getPower() {
+  float power = this->power();
   return isnan(power) || power == 0 ? 0 : power;
 }
 
-float getEnergy() {
-  float energy = pzem.energy();
+
+float Pzem::getEnergy() {
+  float energy = this->energy();
   return isnan(energy) || energy == 0 ? 0 : energy;
 }
 
-float getFrequency() {
-  float frequency = pzem.frequency();
+
+float Pzem::getFrequency() {
+  float frequency = this->frequency();
   return isnan(frequency) || frequency == 0 ? 0 : frequency;
 }
 
-float getPf(){
-  float pf = pzem.pf();
+
+float Pzem::getPf() {
+  float pf = this->pf();
   return isnan(pf) || pf == 0 ? 0 : pf;
 }

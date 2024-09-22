@@ -5,7 +5,17 @@
 #include <ModbusRTU.h>
 
 extern ModbusRTU node;
+using PINS = PinsConfig;
 
-void rsInit();
+class RS485 : public ModbusRTU{
+  public:
+    RS485(int idSlave);
+    void rsInit();
+  private:
+    int _idSlave;
+    const int _RS485_RX = PINS::RS485_RX;
+    const int _RS485_TX = PINS::RS485_TX;
+};
 
-#endif //RS_CONFIG_H
+
+#endif //RS485_CONFIG_H

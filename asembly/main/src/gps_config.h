@@ -5,19 +5,19 @@
 #include <TinyGPS++.h>
 #include <SoftwareSerial.h>
 
-extern TinyGPSPlus gps;
-extern EspSoftwareSerial::UART GPS_Serial;
+extern  EspSoftwareSerial::UART GPS_Serial;
+using PINS = PinsConfig;
 
-void gpsSetup();
-void getLocation();
-// // bool gpsTimeValid();
-// // void getLatitude();
-// // void getLongitude();
-// // void getAltitude();
-// // void getSatellites();
-// // void getTime();
-// // void getSpeed();
-// // void getCourse();
+class GPS : public TinyGPSPlus{
+  public:
+    void gpsSetup();
+    double getLatitude();
+    double getLongitude();
+    String getLocation(bool url = true);
+  
+  private:
+    const int _GPS_RX = PINS::GPS_RX;
+    const int _GPS_TX = PINS::GPS_TX;
+};
 
 #endif //GPS_CONFIG_H
-
