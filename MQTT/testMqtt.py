@@ -17,7 +17,9 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_publish = on_publish
 
-broker = "127.0.0.1"
+# broker = "127.0.0.1"
+broker = "alphaorionis.my.id"
+client.username_pw_set("supersun", "12345678")
 port = 1883
 
 client.connect(broker, port, 60)
@@ -27,14 +29,23 @@ try:
     while True:
         raw_data = [
             {
-                "sensor_slug_1": "sensor raw data 1",
-                "sensor_slug_2": "sensor raw data 2",
-                "timestamp": int(time.time() * 1000)  
-            }
+                "voltage": "124",
+                "current": "124",
+                "latitude": "-7.0091521",
+                "longitude": "110.441913",
+                "timestamp": "1724638823546"
+            },
+            {
+                "voltage": "124",
+                "current": "124",
+                "latitude": "-7.0091521",
+                "longitude": "110.441913",
+                "timestamp": "1724638823546"
+            },
         ]
         
         payload = json.dumps(raw_data)
-        topic = "test/topic"
+        topic = "supersun/25810618-7a40-4df7-b16f-abbcfd7800fb/data"
         
         result = client.publish(topic, payload)
         
