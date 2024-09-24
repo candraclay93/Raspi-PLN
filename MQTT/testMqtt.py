@@ -14,13 +14,12 @@ def on_publish(client, userdata, mid):
 
 
 client = mqtt.Client()
-
-
 client.on_connect = on_connect
 client.on_publish = on_publish
 
-broker = "alphaorionis.my.id"
+broker = "127.0.0.1"
 port = 1883
+
 client.connect(broker, port, 60)
 client.loop_start()
 
@@ -35,7 +34,7 @@ try:
         ]
         
         payload = json.dumps(raw_data)
-        topic = "supersun/25810618-7a40-4df7-b16f-abbcfd7800fb/data"
+        topic = "test/topic"
         
         result = client.publish(topic, payload)
         

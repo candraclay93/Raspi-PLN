@@ -2,14 +2,13 @@ import time
 from LoRaRF import SX127x, LoRaSpi, LoRaGpio
 import os
 import sys
-
 import json
 import re
-
 import signal
 from RPi import GPIO
 import logging
 from cysystemd.journal import JournaldLogHandler
+
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(os.path.dirname(currentdir)))
@@ -36,7 +35,6 @@ LED_RECEIVE_PIN = 23
 GPIO.setwarnings(False)
 GPIO.setup(LED_RUNNING_PIN, GPIO.OUT)
 GPIO.setup(LED_RECEIVE_PIN, GPIO.OUT)
-
 GPIO.output(LED_RUNNING_PIN, GPIO.HIGH)
 
 
@@ -50,10 +48,10 @@ LoRa.setFrequency(433000000)
 LoRa.setRxGain(LoRa.RX_GAIN_POWER_SAVING, LoRa.RX_GAIN_AUTO)
 LoRa.setSpreadingFactor(10)
 LoRa.setBandwidth(125000)
-LoRa.setCodeRate(5)
+LoRa.setCodeRate(4)
 LoRa.setHeaderType(LoRa.HEADER_EXPLICIT)
 LoRa.setPreambleLength(12)
-LoRa.setPayloadLength(15)
+LoRa.setPayloadLength(64)
 LoRa.setCrcEnable(True)
 LoRa.setSyncWord(0x34)
 
@@ -99,22 +97,23 @@ try:
             message += chr(LoRa.read())
         counter = LoRa.read()
         
+        print(message)
+        print("********************************")
         message = extract_json_string(message)
         LoRa.onReceive(receive_callback())
-        logger.info(f"received message {message} with RSII {LoRa.packetRssi()}")
+        # logger.info(f"received message {message} with RSII {LoRa.packetRssi()}")
         
-        # print(message)
         # print(f"{message}  {counter}")
-        # print("Packet status: RSSI = {0:0.2f} dBm | SNR = {1:0.2f} dB".format(
-        #     LoRa.packetRssi(), LoRa.snr()))
+        print("Packet status: RSSI = {0:0.2f} dBm | SNR = {1:0.2f} dB".format(
+            LoRa.packetRssi(), LoRa.snr()))
 
         status = LoRa.status()
         if status == LoRa.STATUS_CRC_ERR:
-            # print("CRC error")
-            logger.error("CRC error")
+            print("CRC error")
+            # logger.error("CRC error")
         elif status == LoRa.STATUS_HEADER_ERR:
-            # print("Packet header error")
-            logger.error("Packet header error")
+            print("Packet header error")
+            # logger.error("Packet header error")
             
         print(f"---" * 30)
         
