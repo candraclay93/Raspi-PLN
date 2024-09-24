@@ -1,33 +1,33 @@
 #include "src/main.h"
-#include "src/rs_config.h"
+#include <ModbusMaster.h>
 #include <SX127x.h>
 #include <ArduinoJson.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#define SCK       12
-#define MISO      13
-#define MOSI      11
-#define LORA_CS   10
-#define LORA_RST  0   
+#define SCK          12
+#define MISO         13
+#define MOSI         11
+#define LORA_CS      10
+#define LORA_RST     0 
+#define RS_RXD_PIN   16  
+#define RS_TXD_PIN   15
 
-RS485 node;
+ModbusMaster node;
 Main base(115200);
 SX127x LoRa;
+HardwareSerial rsSerial(2);
 
 char messageJson[200];
 uint8_t counter = 0;
 
-void hello(){
-  Serial.print("hello");
-}
 
 
 void setup(){
   base.setup();
-  node.rsInit(2);
+  rsSerial.begin(9600, SERIAL_8N1, RS_RXD_PIN, RS_TXD_PIN); 
+  node.begin(2, rsSerial);
   loraSetup();
-  registerRS485();
 
 
   xTaskCreate(
@@ -38,15 +38,6 @@ void setup(){
   1,
   NULL  
   );
-
-  xTaskCreate(
-  rsSlave,
-  "Handle rs Slave",
-  1000,
-  NULL,
-  1,
-  NULL  
-  );  
 }
 
 void loraSetup(){
@@ -65,14 +56,24 @@ void loraSetup(){
   LoRa.setCrcEnable(true);
   LoRa.setSyncWord(0x34);
 
-  LoRa.onTransmit(hello);
+  // LoRa.onTransmit(hello);
 }
 
-void registerRS485(){
-  node.addHreg(1, 1); 
-  node.addHreg(2, 11); 
-  node.addHreg(3, 12); 
-  node.addHreg(4,100); 
+void getDataNode(){
+  uint8_t result;
+  uint16_t data;
+
+  result = node.readHoldingRegisters(1, 1);
+  if (result == node.ku8MBSuccess) {
+    data = node.getResponseBuffer(0);
+    Serial.print("Nilai dari register 1 di slave ID 2: ");
+    Serial.println(data);
+  } else {
+    Serial.print("Error, kode: ");
+    Serial.println(result);
+  }
+
+  // delay(1000);
 }
 
 
@@ -100,19 +101,6 @@ void loop(){
     data["pf"] = pf;
     data["lat"] = "-7.0091521";
     data["lng"] = "110.441913";
-  // StaticJsonDocument<200> doc;
-  //   doc["timestamp"] = base.getTimestamp();
-  //   doc["id"] = base.generateChipID();
-
-  // JsonObject data = doc.createNestedObject("data");
-  //   data["v"] = 200.0;
-  //   data["a"] = 20.00;
-  //   data["p"] = 10;
-  //   data["e"] = 20.0;
-  //   data["f"] = 50;
-  //   data["pf"] = 3.0;
-  //   data["lat"] = "-7.0091521";
-  //   data["lng"] = "110.441913";
 
   
   serializeJson(doc, messageJson);
@@ -138,37 +126,9 @@ void loop(){
   Serial.println(" ms");
   Serial.println();
 
-  delay(3000);
-}
+  getDataNode();
 
-// char createJson(){
-//   StaticJsonDocument<200> doc;
-//     doc["timestamp"] = base.getTimestamp();
-//     doc["id"] = base.generateChipID();
-
-//   JsonObject data = doc.createNestedObject("data");
-//     data["v"] = base.getVoltage();
-//     data["a"] = base.getCurrent();
-//     data["p"] = base.power();
-//     data["e"] = base.getEnergy();
-//     data["f"] = base.getFrequency();
-//     data["pf"] = base.getPf();
-//     data["pf"] = base.getPf();
-//     data["lat"] = "-7.0091521";
-//     data["lng"] = "110.441913";
-
-  
-//   serializeJson(doc, messageJson);
-//   return messageJson;
-// }
-
-
-
-void rsSlave(void * parameter){
-  while(true){
-    node.task();
-    vTaskDelay(10 / portTICK_PERIOD_MS);
-  }
+  delay(10000);
 }
 
 void readGps(void * parameter){
