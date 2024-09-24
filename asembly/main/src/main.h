@@ -18,10 +18,8 @@ class Main : public RTC , public Pzem, public SdCard, public GPS
 public:
     Main(long baudRate);
     void setup();
-    void sendMessage(const String& message);
-    String readMessage();
+    String generateChipID();
     
-
 private:
     long _baudRate;
 };

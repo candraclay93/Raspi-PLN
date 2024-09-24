@@ -19,7 +19,7 @@ uint8_t counter = 0;
 #define MISO    13
 #define MOSI    11
 #define CS      10
-#define RESET   15    
+#define RESET   0   
 // #define DIO0    2   
 
 
