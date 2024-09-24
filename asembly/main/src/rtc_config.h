@@ -13,6 +13,8 @@ class RTC : public RTC_DS3231 {
     void rtcSetup();
     String getDateString();
     String getTimeString();
+    uint64_t getTimestamp();
+
     void setDateTime(int year, int month, int day, int hour, int minute, int second);
   private:
     const int _RTC_SDA_PIN = PINS::RTC_SDA_PIN;

@@ -1,7 +1,7 @@
 #include "main.h"
 
 // HardwareSerial PzemSerial(1);
-
+int chipId = 0;
 Main::Main(long baudRate) : _baudRate(baudRate){}
 
 void Main::setup() {
@@ -12,15 +12,9 @@ void Main::setup() {
     this->gpsSetup();
 }
 
-void Main::sendMessage(const String& message) {
-    Serial.println(message);
-}
-
-String Main::readMessage() {
-    String message = "";
-    while (Serial.available() > 0) {
-        char c = Serial.read();
-        message += c;
+String Main::generateChipID(){
+    for (int i = 0; i < 17; i = i + 8) {
+        chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xFF) << i;
     }
-    return message;
+    return String(chipId);
 }
