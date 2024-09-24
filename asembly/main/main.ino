@@ -7,53 +7,40 @@
 #define SCK     12
 #define MISO    13
 #define MOSI    11
-#define CS_LORA      10
+#define CS_LORA 10
 #define RESET   0   
 
-Main maini(115200);
-
+Main base(115200);
 SX127x LoRa;
 
-char message[] = "HeLoRa World!";
-char message2[] = "Haii Dari ESP32 DEV";
-uint8_t nBytes = sizeof(message);
-uint8_t nBytes2 = sizeof(message2);
 uint8_t counter = 0;
 
 
 void setup(){
-  maini.setup();
+  base.setup();
 
-    Serial.println("Begin LoRa radio");
+  for (int i = 0; i < 17; i = i + 8) {
+    chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xFF) << i;
+  }
+  Serial.printf("ESP32 Chip ID: %u\n", chipId);
+
   if (!LoRa.begin(CS_LORA, RESET, -1, -1, -1)){
-    Serial.println("Something wrong, can't begin LoRa radio");
+    Serial.println("Something wrong, can't begin LoRa");
     while(1);
   }
-
-  Serial.println("Set frequency to 433 Mhz");
   LoRa.setFrequency(433E6);
-
   Serial.println("Set TX power to +17 dBm");
-  LoRa.setTxPower(17, SX127X_TX_POWER_PA_BOOST);                    // TX power +17 dBm using PA boost pin
-
-  Serial.println("Set modulation parameters:\n\tSpreading factor = 7\n\tBandwidth = 125 kHz\n\tCoding rate = 4/5");
-  LoRa.setSpreadingFactor(10);                                       // LoRa spreading factor: 7
-  LoRa.setBandwidth(125000);                                        // Bandwidth: 125 kHz
-  LoRa.setCodeRate(5);                                              // Coding rate: 4/5
-
-  Serial.println("Set packet parameters:\n\tExplicit header type\n\tPreamble length = 12\n\tPayload Length = 15\n\tCRC on");
-  LoRa.setHeaderType(SX127X_HEADER_EXPLICIT);                       // Explicit header mode
-  LoRa.setPreambleLength(12);                                       // Set preamble length to 12
-  LoRa.setPayloadLength(15);                                        // Initialize payloadLength to 15
-  LoRa.setCrcEnable(true);                                          // Set CRC enable
-
-  // Set syncronize word
-  Serial.println("Set syncronize word to 0x34");
+  LoRa.setTxPower(17, SX127X_TX_POWER_PA_BOOST);
+  LoRa.setSpreadingFactor(10);
+  LoRa.setBandwidth(125000);
+  LoRa.setCodeRate(5);
+  LoRa.setHeaderType(SX127X_HEADER_EXPLICIT);
+  LoRa.setPreambleLength(12);
+  LoRa.setPayloadLength(15);
+  LoRa.setCrcEnable(true);
   LoRa.setSyncWord(0x34);
 
   Serial.println("\n-- LORA TRANSMITTER --\n");
-
-
 
   xTaskCreate(
   readGps,
@@ -66,8 +53,8 @@ void setup(){
 }
 void loop(){
     StaticJsonDocument<200> doc;
-    doc["time"] = "2024/09/2";
-    doc["id"] = "12345";
+    doc["time"] = base.getDateString();
+    doc["id"] = String(chipId);
 
 
   JsonObject data = doc.createNestedObject("data");
@@ -94,19 +81,19 @@ void loop(){
 
   LoRa.wait();
 
-  Serial.println(maini.getDateString());
+  Serial.println(base.getDateString());
   Serial.print("Transmit time: ");
   Serial.print(LoRa.transmitTime());
   Serial.println(" ms");
   Serial.println();
 
-  delay(5500);
+  delay(10000);
 }
 
 void readGps(void * parameter){
   while(true){
     while (GPS_Serial.available() > 0) {
-    maini.encode(GPS_Serial.read());
+    base.encode(GPS_Serial.read());
     }
   vTaskDelay(10 / portTICK_PERIOD_MS);
   }
