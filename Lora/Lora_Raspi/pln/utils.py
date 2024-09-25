@@ -3,6 +3,7 @@ from .board_config import BOARD
 from .loraSetup import LoRa
 import json
 import re
+import base64
 
 class Utils:
     
@@ -40,9 +41,21 @@ class Utils:
         if match:
             json_str = match.group(0)
             try:
-                # Mengonversi string JSON menjadi dictionary
                 data = json.loads(json_str)
                 return data
             except json.JSONDecodeError:
                 return "Invalid JSON"
         return "No JSON found"
+    
+    @staticmethod
+    def readMessage():
+        message = ""
+        while LoRa.available() > 1:
+            message += chr(LoRa.read())
+        try:
+            decoded_64 = base64.b64decode(message)
+            decode_str = decoded_64.decode()
+            return Utils.extract_json_string(decode_str)
+        except:
+            return "Invalid Message"
+        
