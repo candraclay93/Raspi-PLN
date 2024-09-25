@@ -3,6 +3,11 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include <ModbusMaster.h>
+#include <SX127x.h>
+#include <Base64.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include <Wire.h>
 
 #include "pins_config.h"
@@ -12,6 +17,14 @@
 #include "gps_config.h"
 
 using PINS = PinsConfig;
+extern ModbusMaster node;
+extern SX127x LoRa;
+
+#define SCK          PINS::SPI_SCK
+#define MISO         PINS::SPI_MISO
+#define MOSI         PINS::SPI_MOSI
+#define LORA_CS      PINS::LORA_CS
+#define LORA_RST     PINS::LORA_RST
 
 class Main : public RTC , public Pzem, public SdCard, public GPS
 {
@@ -19,6 +32,7 @@ public:
     Main(long baudRate);
     void setup();
     String generateChipID();
+    char* encodePayload(char* inputString);
     
 private:
     long _baudRate;
