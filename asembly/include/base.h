@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef BASE_H
+#define BASE_H
 
 #include <Arduino.h>
 #include <ArduinoJson.h>

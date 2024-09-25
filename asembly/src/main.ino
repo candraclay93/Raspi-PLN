@@ -1,4 +1,4 @@
-#include "src/main.h"
+#include "base.h"
 #include <ModbusMaster.h>
 #include <SX127x.h>
 #include <ArduinoJson.h>
@@ -72,8 +72,6 @@ void getDataNode(){
     Serial.print("Error, kode: ");
     Serial.println(result);
   }
-
-  // delay(1000);
 }
 
 
@@ -82,17 +80,17 @@ void loop(){
 
   String v = String(base.getVoltage());
   String a = String(base.getCurrent());
-  String p = String(base.power());
+  String p = String(base.getPower());
   String e = String(base.getEnergy());
   String f = String(base.getFrequency());
   String pf = String(base.getPf());
   uint64_t timestamp = base.getTimestamp();
 
-  StaticJsonDocument<200> doc;
+  JsonDocument doc;
     doc["timestamp"] = base.getTimestamp();
     doc["id"] = base.generateChipID();
 
-  JsonObject data = doc.createNestedObject("data");
+  JsonObject data = doc["data"].to<JsonObject>();
     data["v"] = v;
     data["a"] = a;
     data["p"] = p;
@@ -112,23 +110,23 @@ void loop(){
   LoRa.endPacket();
 
   Serial.write(messageJson);
-  Serial.println();
-  Serial.print("  ");
-  Serial.println(timestamp);
-  Serial.println(base.getTimeString());
-  Serial.println(counter++);
+  // Serial.println();
+  // Serial.print("  ");
+  // Serial.println(timestamp);
+  // Serial.println(base.getTimeString());
+  // Serial.println(counter++);
 
   LoRa.wait();
 
 
-  Serial.print("Transmit time: ");
-  Serial.print(LoRa.transmitTime());
-  Serial.println(" ms");
-  Serial.println();
+  // Serial.print("Transmit time: ");
+  // Serial.print(LoRa.transmitTime());
+  // Serial.println(" ms");
+  // Serial.println();
 
   getDataNode();
 
-  delay(10000);
+  delay(3000);
 }
 
 void readGps(void * parameter){
@@ -140,3 +138,13 @@ void readGps(void * parameter){
   }
 }
 
+
+// void setup()
+// {
+// base.setup();
+// }
+
+// void loop()
+// {
+//   Serial.println("Hello World");
+// }
