@@ -9,7 +9,7 @@ void Main::setup() {
     Serial.begin(_baudRate);
     this->rtcSetup();
     this->pzemSetup();
-    this->sdCardSetup();
+    // this->sdCardSetup();
     this->gpsSetup();
 }
 

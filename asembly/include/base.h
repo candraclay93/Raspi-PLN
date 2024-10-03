@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <ModbusMaster.h>
 #include <SX127x.h>
 #include <Base64.h>
 #include "freertos/FreeRTOS.h"
@@ -17,7 +16,6 @@
 #include "gps_config.h"
 
 using PINS = PinsConfig;
-extern ModbusMaster node;
 extern SX127x LoRa;
 
 #define SCK          PINS::SPI_SCK

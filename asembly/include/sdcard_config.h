@@ -15,8 +15,15 @@ class SdCard{
   public:
     // SdCard();
     void sdCardSetup();
+    void sdEnd();
     void writeFile(const char *path, const char *message);
-    void readFile(const char *path);
+    bool append(const char *path, const char *message, bool first = false);
+    void readFile(const char *path, int startLine = 0, int endLine = -1);
+    void readLastLine(const char *path);
+
+    int lastIndex(File file);
+    bool writeLog(const char *path, const char *message, int limit = 1000);
+
 
 
   private:
