@@ -9,7 +9,6 @@ void Main::setup() {
     Serial.begin(_baudRate);
     this->rtcSetup();
     this->pzemSetup();
-    // this->sdCardSetup();
     this->gpsSetup();
 }
 
@@ -28,4 +27,12 @@ char* Main::encodePayload(char* inputString){
     encodedData[encodedLen] = '\0';
 
     return encodedData;
+}
+
+int Main::ceil(int value1, int value2) {
+  if (value1 % value2 == 0) {
+    return value1 / value2;
+  } else {
+    return (value1 / value2) + 1;
+  }
 }

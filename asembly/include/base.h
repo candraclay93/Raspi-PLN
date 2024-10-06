@@ -31,6 +31,7 @@ public:
     void setup();
     String generateChipID();
     char* encodePayload(char* inputString);
+    int ceil(int value1, int value2);
     
 private:
     long _baudRate;
