@@ -29,7 +29,7 @@ class Main : public RTC , public Pzem, public SdCard, public GPS
 public:
     Main(long baudRate);
     void setup();
-    String generateChipID();
+    String chipID();
     char* encodePayload(char* inputString);
     int ceil(int value1, int value2);
     

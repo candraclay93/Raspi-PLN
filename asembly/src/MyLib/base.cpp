@@ -12,7 +12,7 @@ void Main::setup() {
     this->gpsSetup();
 }
 
-String Main::generateChipID(){
+String Main::chipID(){
     for (int i = 0; i < 17; i = i + 8) {
         chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xFF) << i;
     }

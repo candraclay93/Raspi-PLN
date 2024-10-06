@@ -91,7 +91,7 @@ void sendMessageLora(){
 
     JsonDocument doc;
       doc["timestamp"] = timestamp;
-      doc["id"] = base.generateChipID();
+      doc["id"] = base.chipID();
 
     JsonObject data = doc["data"].to<JsonObject>();
       data["v"] = v;
