@@ -1,7 +1,7 @@
 #include "gps_config.h"
+#include "serial_config.h"
 
 EspSoftwareSerial::UART GPS_Serial;
-
 
 void GPS::gpsSetup(){
   GPS_Serial.begin(9600, SWSERIAL_8N1, _GPS_RX, _GPS_TX, false);
