@@ -2,6 +2,7 @@ from RPi import GPIO
 import os
 import sys
 import signal
+import time
 
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -16,9 +17,10 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGINT, signal_handler)
 
+
 class BOARD :
-    LED_RUNNING_PIN = 25
-    LED_RECEIVE_PIN = 23
+    LED_RUNNING_PIN = 23
+    LED_RECEIVE_PIN = 25
     
     @staticmethod
     def setup():
@@ -36,11 +38,15 @@ class BOARD :
     def receiveLed(on = False):
         if(on):
             GPIO.output(BOARD.LED_RECEIVE_PIN, GPIO.HIGH)
-        GPIO.output(BOARD.LED_RECEIVE_PIN, GPIO.LOW)
-        
+            
+            time.sleep(1)
+        else:
+            GPIO.output(BOARD.LED_RECEIVE_PIN, GPIO.LOW)
+    
     def runningLed(on = False):
         if(on):
             GPIO.output(BOARD.LED_RUNNING_PIN, GPIO.HIGH)
-        GPIO.output(BOARD.LED_RUNNING_PIN, GPIO.LOW)
+        else:
+            GPIO.output(BOARD.LED_RUNNING_PIN, GPIO.LOW)
         
 
