@@ -4,13 +4,15 @@
 #define RXD2 47  // Pin RX untuk komunikasi dengan PZEM
 #define TXD2 48  // Pin TX untuk komunikasi dengan PZEM
 
+HardwareSerial PzemSerial(1);
+
 // Inisialisasi PZEM004Tv30 pada Serial2 (UART1)
-PZEM004Tv30 pzem(Serial2, RXD2, TXD2);  // Gunakan Serial2 dan tentukan pin RX/TX
+PZEM004Tv30 pzem(PzemSerial, RXD2, TXD2);  // Gunakan Serial2 dan tentukan pin RX/TX
 
 void setup() {
   // Inisialisasi komunikasi serial dengan kecepatan baud 9600 untuk PZEM-004T
   Serial.begin(115200);  // Serial monitor untuk debugging
-  Serial2.begin(9600);   // Serial2 untuk komunikasi dengan PZEM
+  PzemSerial.begin(9600);   // Serial2 untuk komunikasi dengan PZEM
 
   Serial.println("Memulai komunikasi dengan PZEM-004T");
 }

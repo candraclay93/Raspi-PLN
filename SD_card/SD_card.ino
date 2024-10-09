@@ -58,4 +58,6 @@ void setup() {
 }
 
 void loop() {
+    writeFile("/example.txt", "Hello, custom SPI SD card!");
+    delay(1000);
 }

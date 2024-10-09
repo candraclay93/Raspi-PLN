@@ -20,7 +20,7 @@ uint8_t counter = 0;
 #define MOSI    11
 #define CS      10
 #define RESET   0   
-// #define DIO0    2   
+// #define DIO0    2
 
 
 void setup() {
@@ -77,16 +77,17 @@ void loop() {
   LoRa.beginPacket();
   // LoRa.write(jsonBuffer, size);
   // LoRa.write(message, nBytes);
-  LoRa.write(jsonBuffer, size);
+  // LoRa.write(jsonBuffer, size);
   LoRa.write(counter);
   LoRa.endPacket();
 
-  Serial.write(jsonBuffer);
-  Serial.println();
+  // Serial.write(jsonBuffer);
+  // Serial.println();
 
   // Serial.write(message);
-  Serial.print("  ");
-  Serial.println(counter++);
+  // Serial.print("  ");
+  Serial.println(counter);
+  counter++;
 
   LoRa.wait();
 

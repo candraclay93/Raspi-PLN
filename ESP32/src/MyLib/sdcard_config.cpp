@@ -1,20 +1,19 @@
 #include "sdcard_config.h"
 
-SPIClass spi = SPIClass(1);
+// SPIClass* sx127x_spi = &SX127X_SPI;
 
-void SdCard::sdCardSetup() {
-  spi.begin(_SPI_SCK, _SPI_MISO, _SPI_MOSI, _SD_CS);
+// void SdCard::sdCardSetup(SPIClass  spi) {
 
-  if (!SD.begin(_SD_CS, spi)) {
-    Serial.println("Gagal menginisialisasi SD card");
-    return;
-  }
-  Serial.println("SD card berhasil diinisialisasi");
-}
+//   if (!SD.begin(_SD_CS, spi)) {
+//     Serial.println("Gagal menginisialisasi SD card");
+//     return;
+//   }
+//   Serial.println("SD card berhasil diinisialisasi");
+// }
 
-void SdCard::sdEnd() {
-  spi.end();
-}
+// void SdCard::sdEnd(SPIClass  spi) {
+//   spi.end();
+// }
 
 
 void SdCard::writeFile(const char *path, const char *message) {
@@ -24,11 +23,6 @@ void SdCard::writeFile(const char *path, const char *message) {
     return;
   }
   file.println(message);
-  // if (file.println(message)) {
-  //   Serial.println("Berhasil menulis ke file");
-  // } else {
-  //   Serial.println("Gagal menulis ke file");
-  // }
   file.close();
 }
 
@@ -78,11 +72,11 @@ void SdCard::readFile(const char *path, int startLine,int endLine) {
   file.close();
 }
 
-void SdCard::readLastLine(const char *path) {
+String SdCard::readLastLine(const char *path) {
   File file = SD.open(path, FILE_READ);
   if (!file) {
-    Serial.println("Gagal membuka file untuk membaca");
-    return;
+    // Serial.println("Gagal membuka file untuk membaca");
+    return "";
   }
   String lastLine = "";
 
@@ -97,8 +91,8 @@ void SdCard::readLastLine(const char *path) {
     }
     lastLine = c + lastLine;
   }
-  Serial.println(lastLine);
   file.close();
+  return lastLine;
 }
 
 int SdCard::lastIndex(File file) {
