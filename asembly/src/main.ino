@@ -91,7 +91,11 @@ void sendMessageLora(){
 
     JsonDocument doc;
       doc["timestamp"] = timestamp;
+<<<<<<< HEAD
       doc["id"] = base.generateChipID();
+=======
+      doc["id"] = base.chipID();
+>>>>>>> parent of 0414d32 (repair configuration)
 
     JsonObject data = doc["data"].to<JsonObject>();
       data["v"] = v;

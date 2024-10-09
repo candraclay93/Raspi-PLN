@@ -8,8 +8,7 @@ void RTC::rtcSetup() {
 
   if (!this->begin()) {
     Serial.println("Tidak dapat menemukan RTC");
-    // while (1);
-    return;
+    while (1);
   }
 
   if (this->lostPower()) {

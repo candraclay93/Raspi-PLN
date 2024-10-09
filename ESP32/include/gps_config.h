@@ -3,9 +3,9 @@
 
 #include "pins_config.h"
 #include <TinyGPS++.h>
-// #include <SoftwareSerial.h>
+#include <SoftwareSerial.h>
 
-// extern  EspSoftwareSerial::UART GPS_Serial;
+extern  EspSoftwareSerial::UART GPS_Serial;
 using PINS = PinsConfig;
 
 class GPS : public TinyGPSPlus{
