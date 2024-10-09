@@ -47,8 +47,9 @@ try:
         payload = json.dumps(raw_data)
         topic = "supersun/25810618-7a40-4df7-b16f-abbcfd7800fb/data"
         
-        result = client.publish(topic, payload)
+        msg_info = client.publish(topic, payload)
         
+        msg_info.wait_for_publish()
         print(f"Payload yang dikirim: {payload}")
         
         time.sleep(20)
