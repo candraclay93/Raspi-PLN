@@ -14,8 +14,8 @@ using PINS = PinsConfig;
 class SdCard{
   public:
     // SdCard();
-    void sdCardSetup(SPIClass  spi);
-    void sdEnd(SPIClass  spi);
+    // void sdCardSetup(SPIClass  spi);
+    // void sdEnd(SPIClass  spi);
     void writeFile(const char *path, const char *message);
     bool append(const char *path, const char *message, bool first = false);
     void readFile(const char *path, int startLine = 0, int endLine = -1);
